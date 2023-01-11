@@ -1,0 +1,44 @@
+ada_eps: 1.0e-08
+averaging: 'poly_8'
+base_lr: 1.0e-03
+batch_size: 100
+batch_size_accum: null
+best_checkpoint_metric: test/.*/accuracy
+data_dir: data
+data_download: true
+data_n_classes: null
+data_n_examples: null
+data_splits_map:
+  train: train
+  test: test
+dataset: timm/torch/cifar10
+device: null
+early_stopping_patience: null
+eval_batch_size: 1000
+grad_accum_steps: 1
+host_name: null
+log_interval: 10
+log_interval_eval: null
+log_to_stdout: true
+loss: log
+lr_schedule: cosine
+max_allowed_loss: 1000000.0
+model: tiny/lenet
+model_head_init: null
+model_input_shape: null
+model_output_dim: null
+model_pretrained: false
+momentum: 0.9
+multi_gpu: true
+num_workers: 2
+optim_alg: adam
+output_dir: results/test
+save_best_checkpoint: true
+save_freq: 0
+seed_model: null
+seed_training: null
+steps_per_epoch: null
+train_length: 100
+train_length_unit: epoch
+weight_decay: 0.0
+weight_decay_biases: 0.0

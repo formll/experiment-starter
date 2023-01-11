@@ -1,0 +1,25 @@
+job_details:
+  name: cifar10-example
+  output_dir: results
+
+parameters:
+  log_interval: [10]
+  save_freq: [0]
+  eval_batch_size: [1000]
+  dataset: ['timm/tfds/cifar10']
+  data_splits_map: ['dict(train="train[:90%]", val="train[90%:]", test="test")'] # here we use 10% of the training set for validation
+  LIST_OF_MODELS:
+    - model: ['tiny/lenet', 'tiny/wrn_10_2']
+      model_pretrained: [false]
+    - model: ['timm/mobilenetv3_small_100']
+      model_pretrained: [false, true]
+  batch_size: [500]
+  momentum: ['0.9,0.99']
+  weight_decay: [0.0]
+  train_length: [40]
+  train_length_unit: ['epoch']
+  lr_schedule: ['cosine']
+  optim_alg: ['adam']
+  base_lr: [1.0e-03]
+  averaging: [null]
+  num_workers: [2]
