@@ -79,4 +79,6 @@ def setup_model(dataset, args: Config):
         if hasattr(model.module, 'default_cfg'):
             model.default_cfg = model.module.default_cfg
 
+    model = torch.compile(model, mode="max-autotune")
+
     return model
