@@ -20,6 +20,7 @@ class Config:
     host_name: str = None  # for bookkeeping - should not be set
     multi_gpu: bool = True
     num_workers: int = 2  # number of cpu workers used for dataloading
+    compile_mode: str = None # Can be either 'default', 'reduce-overhead' or 'max-autotune'.
 
     eval_batch_size: int = None
     max_allowed_loss: float = 1e6  # training stops if loss exceeds this value
