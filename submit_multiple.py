@@ -38,7 +38,7 @@ def unwind_grid(grid_dict):
 
 
 def grid_to_str(list_of_dicts):
-    nunique = pd.DataFrame(list_of_dicts).nunique()
+    nunique = pd.DataFrame(list_of_dicts).nunique(dropna=False)
     nunique = nunique[nunique > 1]
     assert nunique.prod() == len(list_of_dicts)
     return ' x '.join(f'{n} {k}' for k, n in nunique.items())
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     configs_summary_str = grid_to_str(configs)
     configs = list(map(expand_tuple_keys, configs))
     total_configs = len(configs)
-    nunique_keys = pd.DataFrame(configs).nunique()
+    nunique_keys = pd.DataFrame(configs).nunique(dropna=False)
     varying_keys = nunique_keys[nunique_keys > 1].index.values
 
     print(f'Ready to run {total_configs} configurations: {configs_summary_str}')
