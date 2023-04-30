@@ -77,7 +77,7 @@ def setup_optimizer(args: Config, model: torch.nn.Module):
     else:
         raise ValueError('Unknown LR schedule %s' % args.lr_schedule)
     if args.warmup_steps > 0:
-        warmup_factor_func = lambda t: min(1, t / args.warmup_steps)
+        warmup_factor_func = lambda t: min(1, (t+1) / args.warmup_steps)
         lr_factor_func_warmup = lambda t: warmup_factor_func(t) * lr_factor_func(t)
     
     lr_scheduler = LambdaLR(optimizer, lr_factor_func) if args.warmup_steps == 0 else LambdaLR(optimizer, lr_factor_func_warmup)
