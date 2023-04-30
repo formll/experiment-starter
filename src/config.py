@@ -69,6 +69,7 @@ class Config:
     weight_decay_biases: float = 0.0  # weight decay for any parameter with 'bias' in the name
     momentum: Union[float, str] = 0.9  # for adam-like algoritmhs can specify beta1 and beta2 as strings concatenated by "," for example '0.9,0.999'
     ada_eps: float = 1e-8  # epsilon variable for various adaptime optimization methods
+    warmup_steps: int = 0  # number of steps to warmup lr - 0 means no warmup
 
     # averaging
     averaging: str = None  # example options: 'ema_0.999', 'poly_8' (poly_0 is uniform averaging)
