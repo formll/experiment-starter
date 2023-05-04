@@ -44,11 +44,11 @@ def setup_model(dataset, args: Config):
         raise ValueError(f'Unsupported model {args.model}')
 
     with torch.random.fork_rng():
-        if args.seed_model is not None:
-            torch.manual_seed(args.seed_model)  # ?
-
-        for _ in range(100):  # to avoid deadlocks and other weird stuff when loading the model
+        for _ in range(20):  # to avoid deadlocks and other weird stuff when loading the model
             try:
+                if args.seed_model is not None:
+                    torch.manual_seed(args.seed_model)  # ?
+
                 model = create_model(args.model.split('/', 1)[-1],
                                      pretrained=args.model_pretrained,
                                      **shape_args)
