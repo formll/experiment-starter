@@ -180,14 +180,14 @@ The `submit_multiple` scripts has a few additional features: overwrite mode (`-o
 run mode (`-d`). You can read more about them in the command line help.
 
 ## Opening jupyter-lab
-After running the expirements, in order to look and analyze the results, you should open jupyter-lab.
+After running the expirements, in order to look and analyze the results, you should open jupyter-lab.\
 1. Run the following command:
 ```shell
 jupyter-lab --port=27615 --ip="0.0.0.0"
 ```
-Change the port to your favorite unique port
-2. Add "cs.tau.ac.il" to the links that shows up, so it will look like: "http://c-001.cs.tau.ac.il:27615/lab"
-3. Open it in your browser
+Change the port to your favorite unique port\
+2. Add "cs.tau.ac.il" to the links that shows up, so it will look like: "http://c-001.cs.tau.ac.il:27615/lab"\
+3. Open it in your browser\
 
 ## Analyzing experiment results
 After running our experiments, we often wish to look at the results. The jupyter notebook `notebooks/view_results.ipynb`
