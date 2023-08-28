@@ -179,6 +179,24 @@ python submit_multiple.py jobs/cifar10-example.yaml -s submit_2080.sh
 The `submit_multiple` scripts has a few additional features: overwrite mode (`-o`), retry mode (`-r`), and dry 
 run mode (`-d`). You can read more about them in the command line help.
 
+## Opening JupyerLab on remote machines 
+1. Connect to TAU VPN even if you are using TAU wifi.  
+2. You can check clients nodes and their status in: http://cs.tau.ac.il/gpumon  
+3. After connecting to one of the clients terminal, open a tmux section by running the command:  
+   ```shell
+   tmux
+   ```  
+   JupyterLab should be started inside tmux because it will keep the JupyterLab environment active even if the terminal will disconnect.  
+   For tmux documentation: https://tmuxguide.readthedocs.io/en/latest/tmux/tmux.html    
+4. Run the following command:  
+   ```shell
+   jupyter-lab --port={PORT_NUMBER} --ip="0.0.0.0"
+   ```  
+   Change {PORT_NUMBER} to your favorite unique port.  
+5. Add "cs.tau.ac.il" to the links that shows up, so it will look like: "http://c-001.cs.tau.ac.il:{PORT_NUMBER}/lab"  
+6. Open it in your browser  
+   For JupyerLab documentation: https://jupyterlab.readthedocs.io/en/latest/
+
 ## Analyzing experiment results
 After running our experiments, we often wish to look at the results. The jupyter notebook `notebooks/view_results.ipynb`
 demonstrate my favorite method for doing so. The key points are:
