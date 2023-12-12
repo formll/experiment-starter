@@ -22,3 +22,4 @@ dependencies:
     - git+https://github.com/openai/CLIP.git
     - tensorflow
     - tensorflow-datasets
+    - wandb

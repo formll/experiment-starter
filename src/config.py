@@ -26,6 +26,12 @@ class Config:
 
     early_stopping_patience: int = None  # number of epochs to stop if eval error does not improve
 
+    # wandb
+    wandb: bool = False  # log results to wandb
+    wandb_api_key: str = None  # Your personal wandb api key. Make sure not to share a config file containing your wandb api key.
+    wandb_project_name: str = None  # If not set, the run will be saved in the "Uncategorized" project
+    wandb_run_name: str = 'tags'  # If set to 'tags', will create the run name based on the wandb tags (look at setup_wandb in train.py).
+
     # seeds
     seed_model: int = None  # determines model initialization
     seed_training: int = None  # determine training randomness (e.g., batch order)

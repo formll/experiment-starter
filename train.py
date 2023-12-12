@@ -19,6 +19,10 @@ from dataclasses import asdict
 from src import Config, CLASSIFICATION_LOSSES
 from src import setup_datasets, setup_dataloaders, setup_model, setup_optimizer
 
+try:
+    import wandb
+except ImportError:
+    wandb = None
 
 def setup_logger(args: Config):
     args.host_name = subprocess.run(
@@ -35,6 +39,29 @@ def setup_logger(args: Config):
         logger.add(os.path.join(args.output_dir, 'training.log'))
 
     return output_dir
+
+
+def setup_wandb(args: Config):
+    if args.wandb:
+        assert wandb is not None, 'Please install wandb'
+        logger.debug('Starting wandb.')
+        # tags can be used to filter runs in the wandb project. Change according to your need.
+        tags = [
+            f"lr-{args.base_lr}",
+            f"momentum-{args.momentum}",
+            f"bs-{args.batch_size}",
+        ]
+        name = "_".join(tags) if args.wandb_run_name == 'tags' else args.wandb_run_name
+        os.environ["WANDB_API_KEY"] = args.wandb_api_key
+        wandb.init(
+            project=args.wandb_project_name,
+            name=name,
+            id=wandb.util.generate_id(),
+            tags=tags,
+            config=vars(args),
+            dir=os.path.join(args.output_dir, "wandb_tmp")
+        )
+        logger.debug('Finished loading wandb.')
 
 
 # ----------------------------- SINGLE DATALOADER PASS ---------------------------------
@@ -92,13 +119,16 @@ def run_batches(mode_name, is_training, args: Config, loader, model,
 
         # TODO: optionally log also distance from init and magnitude of the gradient
         if is_training:
-            per_batch_metrics.append(dict(
+            batch_metrics = dict(
                 seen_examples=seen_examples,
                 loss=loss.item(),
                 batch_size=x.shape[0],
                 learning_rate=float(optimizer.param_groups[0]['lr']),
                 accuracy=num_correct / x.shape[0]
-            ))
+            )
+            per_batch_metrics.append(batch_metrics)
+            if args.wandb:
+                wandb.log({'batch/' + k: v for k, v in batch_metrics.items()})
 
         if is_training:
             add_to_log = (take_training_step and (
@@ -137,6 +167,7 @@ def run_batches(mode_name, is_training, args: Config, loader, model,
 @logger.catch(reraise=True)
 def experiment_generator(args: Config):
     output_dir = setup_logger(args)
+    setup_wandb(args)
     save_output = args.output_dir is not None
     save_checkpoints = save_output and args.save_freq > 0
     save_best_checkpoint = save_output and args.save_best_checkpoint
@@ -152,8 +183,11 @@ def experiment_generator(args: Config):
 
     logger.info(f'Args:\n{yaml.dump(asdict(args), sort_keys=True)}')
     if output_dir is not None:
-        with open(os.path.join(output_dir, 'config.yaml'), 'w') as f:
+        config_path = os.path.join(output_dir, 'config.yaml')
+        with open(config_path, 'w') as f:
             yaml.dump(asdict(args), f, sort_keys=True)
+            if args.wandb:
+                wandb.save(config_path)
 
     stats_df = pd.DataFrame()
 
@@ -199,6 +233,8 @@ def experiment_generator(args: Config):
 
             stats_df = pd.concat([stats_df, pd.DataFrame([stats], index=[0])],
                                  ignore_index=True)
+            if args.wandb:
+                wandb.log(stats)
 
             if save_output:
                 stats_df.to_csv(os.path.join(output_dir, 'stats.csv'))
