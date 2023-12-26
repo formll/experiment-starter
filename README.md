@@ -77,6 +77,11 @@ mkdir /home/ycarmon/no_backup/users/${USER}/${PROJECT_FOLDER}/results
 ln -s /home/ycarmon/no_backup/users/${USER}/${PROJECT_FOLDER}/results .
 ```
 
+### Using WanDB
+The first time you use wandb you will be prompted with login instructions asking for your wandb account API key.  
+**Note**: Make sure you install wandb<=0.12.21. Later versions have a bug that crash when running sbatch commands from a python subprocess. Installing wandb using the environment.yml file will do that for you.  
+For a wandb usage example see `jobs/linear-classifier-example-wandb.yaml`.
+
 ## Code structure
 
 The repository contains two main scripts:
@@ -268,6 +273,9 @@ make sure to only contribute general-purpose features and not something specific
 - [ ] Hugging Face integration and NLP capabilities
 - [ ] Advanced augmentations (rand augment, mixup, etc.) from timm
 - [ ] AMP and other running time optimizations from timm
+- [X] WanDB integration
+- [X] Logging cpu, gpu and memory utilization - available with WanDB
+- [ ] Comet integration
 - [ ] Support evaluation on multiple datasets (e.g., ImageNetV2)
 - [ ] Sent Slack / SMS notifications for jobs finishing / failing etc. (needs some design to make sure we don't get
       overwhelmed with notifications in jobs with many experiments)

@@ -45,21 +45,14 @@ def setup_wandb(args: Config):
     if args.wandb:
         assert wandb is not None, 'Please install wandb'
         logger.debug('Starting wandb.')
-        # tags can be used to filter runs in the wandb project. Change according to your need.
-        tags = [
-            f"lr-{args.base_lr}",
-            f"momentum-{args.momentum}",
-            f"bs-{args.batch_size}",
-        ]
-        name = "_".join(tags) if args.wandb_run_name == 'tags' else args.wandb_run_name
-        os.environ["WANDB_API_KEY"] = args.wandb_api_key
+        name = "+".join(args.wandb_tags) if args.wandb_run_name is None else args.wandb_run_name
         wandb.init(
             project=args.wandb_project_name,
             name=name,
             id=wandb.util.generate_id(),
-            tags=tags,
+            tags=args.wandb_tags,
             config=vars(args),
-            dir=os.path.join(args.output_dir, "wandb_tmp")
+            dir=args.output_dir
         )
         logger.debug('Finished loading wandb.')
 
@@ -128,7 +121,7 @@ def run_batches(mode_name, is_training, args: Config, loader, model,
             )
             per_batch_metrics.append(batch_metrics)
             if args.wandb:
-                wandb.log({'batch/' + k: v for k, v in batch_metrics.items()})
+                wandb.log({'train/batch/' + k: v for k, v in batch_metrics.items()})
 
         if is_training:
             add_to_log = (take_training_step and (

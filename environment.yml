@@ -22,4 +22,4 @@ dependencies:
     - git+https://github.com/openai/CLIP.git
     - tensorflow
     - tensorflow-datasets
-    - wandb
+    - wandb==0.12.21  # Later versions have a bug that crash when running sbatch commands from a subprocess

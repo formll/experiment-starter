@@ -28,9 +28,9 @@ class Config:
 
     # wandb
     wandb: bool = False  # log results to wandb
-    wandb_api_key: str = None  # Your personal wandb api key. Make sure not to share a config file containing your wandb api key.
     wandb_project_name: str = None  # If not set, the run will be saved in the "Uncategorized" project
-    wandb_run_name: str = 'tags'  # If set to 'tags', will create the run name based on the wandb tags (look at setup_wandb in train.py).
+    wandb_run_name: str = None  # If None, will create the run name based on the wandb tags.
+    wandb_tags: Sequence[str] = field(default_factory=list)  # tags can be used to filter runs in the wandb project.
 
     # seeds
     seed_model: int = None  # determines model initialization

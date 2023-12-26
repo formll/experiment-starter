@@ -10,6 +10,11 @@ import numpy as np
 from copy import deepcopy
 from time import sleep
 
+try:
+    import wandb
+except ImportError:
+    wandb = None
+
 
 def format_key(k):
     return '_'.join([kk[:3] for kk in k.split('_')])
@@ -55,6 +60,17 @@ def expand_tuple_keys(dict_with_tuples):
         return expand_tuple_keys(dict_with_tuples)
 
 
+def get_wandb_args(job_details, wandb_tags, wandb_run_name):
+    wandb_args = dict()
+    if job_details['wandb']:
+        wandb_args = dict(
+            wandb=job_details['wandb'],
+            wandb_tags=wandb_tags,
+            wandb_run_name=wandb_run_name,
+            wandb_project_name=job_details['wandb_project_name'])
+    return wandb_args
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('jobfile', type=str,
@@ -88,8 +104,12 @@ if __name__ == '__main__':
         jobfile = os.path.join(args.jobfile, 'job.yaml')
         with open(jobfile, 'r') as f:
             job_description = yaml.safe_load(f)
+        job_details = job_description['job_details']
         batch_dir = args.jobfile
         batch_name = os.path.split(batch_dir)[-1]
+
+    if job_details['wandb']:
+        wandb.login()
 
     if os.path.exists(batch_dir) and os.listdir(batch_dir):
         if not (args.overwrite or args.rerun):
@@ -114,13 +134,15 @@ if __name__ == '__main__':
 
     def grid_generator():
         for i, kvs in enumerate(configs):
-            spec_name = '+'.join([f'{format_key(k)}={format_value(kvs[k])}'
-                                 for k in varying_keys])
+            varying_specs = [f'{format_key(k)}={format_value(kvs[k])}' for k in varying_keys]
+            spec_name = '+'.join(varying_specs)
             spec_name = f'{i:03d}_{batch_name}+{spec_name}'
             out_dir = os.path.join(batch_dir, spec_name)
             if os.path.exists(os.path.join(out_dir, 'done')):
                 continue
-            spec = dict(output_dir=out_dir, **kvs)
+            spec = dict(output_dir=out_dir, 
+                        **get_wandb_args(job_details, varying_specs, spec_name),
+                        **kvs)
             spec_filename = os.path.join(out_dir, 'spec.yaml')
             if not args.dry_run:
                 os.makedirs(out_dir, exist_ok=True)

@@ -1,6 +1,8 @@
 job_details:
-  name: linear-classifier-example
+  name: linear-classifier-example-wandb
   output_dir: results
+  wandb: true
+  wandb_project_name: 'linear-classifier-project-name'
 
 parameters:
   log_interval: [10]
@@ -24,6 +26,3 @@ parameters:
   optim_alg: ['sgd']
   averaging: ['poly_8']
   num_workers: [1]
-  wandb: [true]
-  wandb_api_key: ['<your wandb api key>']
-  wandb_project_name: ['linear-classifier-example']
