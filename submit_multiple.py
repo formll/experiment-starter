@@ -136,12 +136,13 @@ if __name__ == '__main__':
         for i, kvs in enumerate(configs):
             varying_specs = [f'{format_key(k)}={format_value(kvs[k])}' for k in varying_keys]
             spec_name = '+'.join(varying_specs)
+            wandb_run_name = f"{batch_name}/{i:03d}_{spec_name}"
             spec_name = f'{i:03d}_{batch_name}+{spec_name}'
             out_dir = os.path.join(batch_dir, spec_name)
             if os.path.exists(os.path.join(out_dir, 'done')):
                 continue
             spec = dict(output_dir=out_dir, 
-                        **get_wandb_args(job_details, varying_specs, spec_name),
+                        **get_wandb_args(job_details, varying_specs, wandb_run_name),
                         **kvs)
             spec_filename = os.path.join(out_dir, 'spec.yaml')
             if not args.dry_run:

@@ -292,4 +292,5 @@ make sure to only contribute general-purpose features and not something specific
 - [ ] Add support for gradient clipping
 - [ ] Add support for learning rate warm-up
 - [ ] Add a timestamp column to `stats.csv`
+- [ ] Update wandb version when the bug described in [Using WanDB](#using-wandb) is resolved.
 

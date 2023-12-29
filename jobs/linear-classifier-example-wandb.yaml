@@ -2,7 +2,7 @@ job_details:
   name: linear-classifier-example-wandb
   output_dir: results
   wandb: true
-  wandb_project_name: 'linear-classifier-project-name'
+  wandb_project_name: 'linear-classifier-example'
 
 parameters:
   log_interval: [10]
