@@ -77,6 +77,11 @@ mkdir /home/ycarmon/no_backup/users/${USER}/${PROJECT_FOLDER}/results
 ln -s /home/ycarmon/no_backup/users/${USER}/${PROJECT_FOLDER}/results .
 ```
 
+### Using WanDB
+The first time you use wandb you will be prompted with login instructions asking for your wandb account API key.  
+**Note**: Make sure you install wandb<=0.12.21. Later versions have a bug that crash when running sbatch commands from a python subprocess. Installing wandb using the environment.yml file will do that for you.  
+For a wandb usage example see `jobs/linear-classifier-example-wandb.yaml`.
+
 ## Code structure
 
 The repository contains two main scripts:
@@ -124,6 +129,7 @@ The code internals are in the `src` directory. To explore it, start with reading
 * Supports gradient accumulation for batch sizes that can't fit in memory.
 * Supports early stopping based on a patience heuristic, with flexible configuration of the metric used to determine stopping.
 * Supports model averaging and evaluation of both the averaged and last checkpoints.
+* Supports wandb for real-time visualization of structured log data. Additionally, wandb logs CPU, GPU, and memory utilization.
 
 ### The "job specification" format
 The job specification yaml is a dict with keys `job_details` and `parameters`. The `job_details` field just defines a name for 
@@ -219,7 +225,7 @@ folder with your local machine, allowing you to run the notebook locally for a s
 **What about tensorboard/wandb/comet?** I am not a fan of GUI's for tracking training runs because in my experience
 the time invested in messing around with these GUI's eventually exceeds (often by far) the time it takes to create 
 the visualizations that shows you exactly what you want. That said, I'm fine with *additionally* integrating one
-or more of these tools with the script (it's in the todo's).
+or more of these tools with the script. In fact, there is already an implementation for wandb included.
 
 ## Best practices and general gotchas
 - When adding a new functionality it is very important to **set default parameters such that the default behaviour is 
@@ -267,8 +273,9 @@ make sure to only contribute general-purpose features and not something specific
 - [ ] Hugging Face integration and NLP capabilities
 - [ ] Advanced augmentations (rand augment, mixup, etc.) from timm
 - [ ] AMP and other running time optimizations from timm
-- [ ] WandB / Comet integration
-- [ ] Logging cpu, gpu and memory utilization (note: wandb does that automatically, at least to some extent)
+- [X] WanDB integration
+- [X] Logging cpu, gpu and memory utilization - available with WanDB
+- [ ] Comet integration
 - [ ] Support evaluation on multiple datasets (e.g., ImageNetV2)
 - [ ] Sent Slack / SMS notifications for jobs finishing / failing etc. (needs some design to make sure we don't get
       overwhelmed with notifications in jobs with many experiments)
@@ -285,4 +292,5 @@ make sure to only contribute general-purpose features and not something specific
 - [ ] Add support for gradient clipping
 - [ ] Add support for learning rate warm-up
 - [ ] Add a timestamp column to `stats.csv`
+- [ ] Update wandb version when the bug described in [Using WanDB](#using-wandb) is resolved.
 

@@ -26,6 +26,12 @@ class Config:
 
     early_stopping_patience: int = None  # number of epochs to stop if eval error does not improve
 
+    # wandb
+    wandb: bool = False  # log results to wandb
+    wandb_project_name: str = None  # If not set, the run will be saved in the "Uncategorized" project
+    wandb_run_name: str = None  # If None, will create the run name based on the wandb tags.
+    wandb_tags: Sequence[str] = field(default_factory=list)  # tags can be used to filter runs in the wandb project.
+
     # seeds
     seed_model: int = None  # determines model initialization
     seed_training: int = None  # determine training randomness (e.g., batch order)

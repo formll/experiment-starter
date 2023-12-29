@@ -1,0 +1,28 @@
+job_details:
+  name: linear-classifier-example-wandb
+  output_dir: results
+  wandb: true
+  wandb_project_name: 'linear-classifier-example'
+
+parameters:
+  log_interval: [10]
+  save_freq: [0]
+  eval_batch_size: [10000]
+  dataset: ['libsvm/covtype.multiclass']
+  data_splits_map: ['dict(train="train", traineval="train")'] # here we are evaluating on the training set
+  model: ['linear']
+  model_head_init: ['zero']
+  batch_size: [512, 2048, 8192]
+  LIST_OF_LRS:  # use the same grid of effective learning rate for all momentum values
+    - base_lr: '[float(x) for x in 2.0 ** np.arange(-6, 3)]'
+      momentum: [0.0]
+    - base_lr: '[float(x)/10 for x in 2.0 ** np.arange(-6, 3)]'
+      momentum: [0.9]
+  weight_decay: [0.0]
+  samples_per_epoch: [81920]
+  train_length: [20]
+  train_length_unit: ['epoch']
+  lr_schedule: ['constant']
+  optim_alg: ['sgd']
+  averaging: ['poly_8']
+  num_workers: [1]
