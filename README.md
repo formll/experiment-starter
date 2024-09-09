@@ -1,6 +1,6 @@
 # Experiment starter code
 
-The goal of this repository is to help you quickly start your ML/optimization experiments by providing a 
+The goal of this repository is to help members of the FoRMLL quickly start  ML/optimization experiments by providing a 
 fairly generic and extensible scripts for pytorch-based training + slurm submission automation. Key features include:
 - Integration of multiple libraries for data and model management (and particularly `timm`) 
 - Strong reproducibility via flexible configuration architecture
